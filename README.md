@@ -12,10 +12,11 @@ Posts can be connected to place.
 Anyone can see the feed. Registered users can define regions of interest.
 
 Todo:
-Page for a place (with all related info and posts)
-Notifications
-Edit/delete place
-Edit/delete post
-Edit/delete user
-Add comments
+Add chat.
+Page for a place (with all related info and posts).
+Notifications.
+Edit/delete place.
+Edit/delete post.
+Edit/delete user.
+Add comments.
 
