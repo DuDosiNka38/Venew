@@ -1,0 +1,4 @@
+export const MIN_NAME_LENGTH = 3;
+export const USERS_POLLER_INTERVAL = 3000;
+export const USER_DATA_POLLER_INTERVAL = 3000;
+
