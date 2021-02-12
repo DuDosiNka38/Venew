@@ -22,14 +22,13 @@ export default class AuthServiceFirebase implements AuthService {
             }))
     }
 
-    login(loginData: LoginData): Promise<any> {
+    login(loginData: LoginData): Promise<boolean> {
         if (!loginData.password) {
             return AuthServiceFirebase.socialNetworkAuth(loginData.username);
         }
         return appFirebase.auth()
             .signInWithEmailAndPassword(loginData.username, loginData.password)
-            .then((authData) => console.log(authData))
-            .catch((error) => console.log(error && error.message));
+            .then(() => true).catch((error) => false);
     }
 
     logout(): Promise<boolean> {

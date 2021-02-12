@@ -13,6 +13,7 @@ import {createMuiTheme, ThemeProvider} from '@material-ui/core';
 import {UserData} from "./services/AuthService";
 import {useSelector} from "react-redux";
 import {ReducersType} from "./redux/store";
+import Chat from "./components/Chat/Chat";
 
 const App: React.FC = (props: any) => {
   usePollerRedux<User[]>(usersService, usersService.getAllUsers, SET_USERS, USERS_POLLER_INTERVAL);
@@ -35,6 +36,7 @@ const App: React.FC = (props: any) => {
         <Route path='/auth_page' component={AuthPage} />
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
+        <Route path='/chat' component={Chat} />
       </Switch>
     </HashRouter>
   </ThemeProvider>

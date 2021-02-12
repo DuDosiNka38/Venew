@@ -4,12 +4,12 @@ import 'firebase/database';
 import 'firebase/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDCPRoE8OTjByaTgi3UTr5LMTcjziuwKhg",
-    authDomain: "auth-venew.firebaseapp.com",
-    projectId: "auth-venew",
-    storageBucket: "auth-venew.appspot.com",
-    messagingSenderId: "202350002520",
-    appId: "1:202350002520:web:df7a9d18882f00db23e52d"
+    apiKey: "AIzaSyB6jD1BEvkucdE8ekpdBu_aHnxfL_vB1Ic",
+    authDomain: "auth-register-venew.firebaseapp.com",
+    projectId: "auth-register-venew",
+    storageBucket: "auth-register-venew.appspot.com",
+    messagingSenderId: "80372091875",
+    appId: "1:80372091875:web:b452f68e666360bb91eed6"
 };
 
 const appFirebase = firebase.initializeApp(firebaseConfig);

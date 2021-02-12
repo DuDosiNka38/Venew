@@ -8,6 +8,6 @@ export type UserData = {
 
 export default interface AuthService {
     getUserData(): Observable<UserData>;
-    login(loginData: LoginData): Promise<any>;
+    login(loginData: LoginData): Promise<boolean>;
     logout(): Promise<boolean>;
 }
