@@ -1,9 +1,16 @@
-import User from "../models/User";
-import {UserData} from '../services/AuthService';
-export const SET_USERS = 'SET_USERS';
-export const SET_USER_DATA = 'SET_USER_DATA';
+import {SET_USER, CLEAR_USER, UserActions} from './types';
 
-export const usersAction = (users: User[]): {type: string, payload: any} =>
-    ({type: SET_USERS, payload: users});
-export const userDataAction = (userData: UserData): {type: string, payload: any} =>
-    ({type: SET_USER_DATA, payload: userData})
+export const setUser = (user: any): UserActions => {
+    return {
+        type: SET_USER,
+        payload: {
+            currentUser: user,
+        }
+    }
+}
+
+export const clearUser = (): UserActions => {
+    return {
+        type: CLEAR_USER
+    }
+}

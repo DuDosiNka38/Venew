@@ -6,6 +6,7 @@ import 'firebase/storage';
 const firebaseConfig = {
     apiKey: "AIzaSyB6jD1BEvkucdE8ekpdBu_aHnxfL_vB1Ic",
     authDomain: "auth-register-venew.firebaseapp.com",
+    databaseURL: "auth-register-venew-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "auth-register-venew",
     storageBucket: "auth-register-venew.appspot.com",
     messagingSenderId: "80372091875",

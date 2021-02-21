@@ -1,6 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react";
-import User from '../../../models/User';
-import {getRandomNumber} from '../../../utils/random';
 import {Box, Button, Link, TextField} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -24,64 +22,51 @@ function Copyright() {
     );
 }
 
+export type UserData = {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
 type Props = {
-    users?: User[]
-    user?: User;
-    onSubmit: (user: User) => Promise<any>;
+    onSubmit: (userData: UserData) => Promise<any>;
 } & WithStyles<typeof styles>
 
 const RegisterForm: React.FC<Props> = (props: Props) => {
     const {onSubmit, classes} = props;
-    const [user, setUser] = useState<User>({
-        id: NaN, username: '', email: '', password: '', confirmPassword: '', created: null
+    const [userData, setUserData] = useState<UserData>({
+        username: '', email: '', password: '', confirmPassword: ''
     });
-    const [loading, setLoading] = useState<boolean>(false);
+    const [pristine, setPristine] = useState<boolean>(false);
     const [isValid, setIsValid] = useState<boolean>(false);
 
     const handleChange = (event: any) => {
-        const created: string = new Date().toISOString();
-        const id: number = getRandomNumber(100000000, 999999999);
-        setUser({
-            ...user, created, id,
-            [event.target.name]: event.target.value
-        });
+        setUserData({...userData, [event.target.name]: event.target.value});
     }
 
     async function onSubmitForm(event: any) {
         event.preventDefault();
-        setLoading(true);
-        try {
-            await onSubmit(user);
-        } catch (error) {
-            throw new Error(error.message);
-        } finally {
-            setLoading(false);
-            setUser({id: NaN, username: '', email: '', password: '', confirmPassword: '', created: null});
+        setPristine(true);
+        if (isValid) {
+            return await onSubmit(userData);
         }
     }
 
-    const validatePasswordFn = (): any => {
-        const {password} = user;
-        if (password.length < 6) return 'password can\'t be less than 6 symbols';
-    }
-
-    const validatePassword = useCallback(validatePasswordFn, [user]);
-
     const validateConfirmPasswordFn = (): any => {
-        const {password, confirmPassword} = user;
+        const {password, confirmPassword} = userData;
         if (password !== confirmPassword) return 'password and confirm password fields do not match'
     }
 
-    const validateConfirmPassword = useCallback(validateConfirmPasswordFn, [user]);
+    const validateConfirmPassword = useCallback(validateConfirmPasswordFn, [userData]);
 
     useEffect(() => {
         function validate(): boolean {
-            return !validatePassword()
-                && !validateConfirmPassword()
+            return !validateConfirmPassword()
         }
 
         setIsValid(validate());
-    }, [user, validatePassword, validateConfirmPassword])
+    }, [userData, validateConfirmPassword])
 
     return (
         <main className={classes.container}>
@@ -103,10 +88,9 @@ const RegisterForm: React.FC<Props> = (props: Props) => {
                                     label="User name"
                                     required
                                     autoFocus
-                                    error={!user.username}
-                                    helperText={!user.username && 'username should be defined'}
+                                    color='secondary'
                                     onChange={handleChange}
-                                    value={user.username}
+                                    value={userData.username}
                                 />
                             </FormControl>
                         </Grid>
@@ -118,10 +102,9 @@ const RegisterForm: React.FC<Props> = (props: Props) => {
                                     label="Email"
                                     required
                                     autoFocus
-                                    error={!user.email}
-                                    helperText={!user.email && 'email should be defined'}
+                                    color='secondary'
                                     onChange={handleChange}
-                                    value={user.email}
+                                    value={userData.email}
                                 />
                             </FormControl>
                         </Grid>
@@ -130,10 +113,10 @@ const RegisterForm: React.FC<Props> = (props: Props) => {
                             <TextField label='Password' name='password'
                                        type='password'
                                        required
-                                       error={!!validatePassword()}
-                                       helperText={validatePassword()}
+                                       inputProps={{minLength: 6}}
+                                       color='secondary'
                                        onChange={handleChange}
-                                       value={user.password}
+                                       value={userData.password}
                             />
                             </FormControl>
                         </Grid>
@@ -142,10 +125,12 @@ const RegisterForm: React.FC<Props> = (props: Props) => {
                                 <TextField label='Confirm password' name='confirmPassword'
                                            type='password'
                                            required
-                                           error={!!validateConfirmPassword()}
+                                           inputProps={{minLength: 6}}
+                                           error={pristine && !!validateConfirmPassword()}
                                            helperText={validateConfirmPassword()}
+                                           color='secondary'
                                            onChange={handleChange}
-                                           value={user.confirmPassword}
+                                           value={userData.confirmPassword}
                                 />
                             </FormControl>
                         </Grid>
@@ -156,7 +141,6 @@ const RegisterForm: React.FC<Props> = (props: Props) => {
                         variant="contained"
                         color="secondary"
                         className={classes.submit}
-                        disabled={!isValid || loading}
                     >
                         Sing up
                     </Button>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Box, Button, Link, TextField} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -28,39 +28,21 @@ export type LoginData = {
 
 type Props = {
     onSubmit: (loginData: LoginData) => Promise<boolean>;
-    passwordErrorMessage?: (password: string) => string
 } & WithStyles<typeof styles>
 
 const LoginForm: React.FC<Props> = (props) => {
-    const {onSubmit, passwordErrorMessage, classes} = props;
+    const {onSubmit, classes} = props;
     const [loginData, setLoginData] = useState<LoginData>({username: '', password: ''});
-    const [loading, setLoading] = useState<boolean>(false);
-    const [isValid, setIsValid] = useState<boolean>(false);
 
     async function onSubmitForm(event: any) {
         event.preventDefault();
-        setLoading(true);
-        try {
-            await onSubmit(loginData);
-        } catch (error) {
-            throw new Error(error.message);
-        } finally {
-            setLoading(false);
-            setLoginData({username: '', password: ''});
-        }
+        return await onSubmit(loginData);
     }
 
     function handlerChange(event: any) {
         setLoginData({...loginData, [event.target.name]: event.target.value});
     }
 
-    useEffect(() => {
-        function validate(): boolean {
-            return !!loginData.username && (!passwordErrorMessage || !passwordErrorMessage(loginData.password));
-        }
-
-        setIsValid(validate());
-    }, [loginData, passwordErrorMessage])
     return (
         <main className={classes.container}>
             <Paper className={classes.paper}>
@@ -79,8 +61,7 @@ const LoginForm: React.FC<Props> = (props) => {
                             required
                             autoFocus
                             autoComplete='email'
-                            error={!loginData.username}
-                            helperText={!loginData.username && 'email should be defined'}
+                            color='secondary'
                             onChange={handlerChange}
                             value={loginData.username}
                         />
@@ -90,8 +71,8 @@ const LoginForm: React.FC<Props> = (props) => {
                         <TextField name='password' label='Password' type='password'
                                    required
                                    autoComplete='current-password'
-                                   error={!(!passwordErrorMessage || !passwordErrorMessage(loginData.password))}
-                                   helperText={!!passwordErrorMessage && passwordErrorMessage(loginData.password)}
+                                   inputProps={{minLength: 6}}
+                                   color='secondary'
                                    onChange={handlerChange}
                                    value={loginData.password}
                         />
@@ -103,7 +84,6 @@ const LoginForm: React.FC<Props> = (props) => {
                         variant="contained"
                         color="secondary"
                         className={classes.submit}
-                        disabled={!isValid || loading}
                     >
                         Sign In
                     </Button>

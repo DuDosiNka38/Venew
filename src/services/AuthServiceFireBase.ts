@@ -1,34 +1,18 @@
-import AuthService, {UserData} from './AuthService';
-import {Observable, of} from 'rxjs';
+import AuthService from './AuthService';
 import {LoginData} from '../components/library/LoginForm';
-import {authState} from 'rxfire/auth';
-import {docData} from 'rxfire/firestore';
 import appFirebase from '../config/firebase-config';
 import firebase from 'firebase';
-import {mergeMap, map} from 'rxjs/operators';
 
 export default class AuthServiceFirebase implements AuthService {
-    getUserData(): Observable<UserData> {
-        return authState(appFirebase.auth())
-            .pipe(mergeMap<firebase.User, Observable<UserData>>(user => {
-                if (!!user) {
-                    return user.email ?
-                        docData(appFirebase.firestore().collection('users')
-                            .doc(user.email as string))
-                            .pipe(map((doc: any) => ({username: user.uid, isAdmin: !!doc && !!doc.uid}))) :
-                        of({username: user.uid, isAdmin: false})
-                }
-                return of({username: '', isAdmin: false});
-            }))
-    }
 
-    login(loginData: LoginData): Promise<boolean> {
+    login(loginData: LoginData): Promise<any> {
         if (!loginData.password) {
             return AuthServiceFirebase.socialNetworkAuth(loginData.username);
         }
         return appFirebase.auth()
             .signInWithEmailAndPassword(loginData.username, loginData.password)
-            .then(() => true).catch((error) => false);
+            .then((signedUser) => console.log(signedUser))
+            .catch((error) => console.log(error && error.message));
     }
 
     logout(): Promise<boolean> {
