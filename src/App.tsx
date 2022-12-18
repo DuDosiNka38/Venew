@@ -24,7 +24,8 @@ const App: React.FC = (props: any) => {
         props.history.push('/');
       } else {
         dispatch(clearUser());
-        props.history.push('/auth_page');
+       // props.history.push('/auth_page');
+        props.history.push('/');
       }
     })
   }, [])
@@ -44,7 +45,7 @@ const App: React.FC = (props: any) => {
           <ThemeProvider theme={theme}>
             <Switch>
               <Route exact path='/' component={Dashboard}/>
-             // <Route path='/auth_page' component={AuthPage}/>
+              <Route path='/auth_page' component={AuthPage}/>
               <Route path='/login' component={Login}/>
               <Route path='/register' component={Register}/>
               <Route path='/chat' component={Chat}/>
