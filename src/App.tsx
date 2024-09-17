@@ -24,7 +24,7 @@ const App: React.FC = (props: any) => {
         props.history.push('/');
       } else {
         dispatch(clearUser());
-        props.history.push('/auth_page');
+        props.history.push('/chat');
       }
     })
   }, [])
